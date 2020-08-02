@@ -6,8 +6,9 @@ const path = require('path');
 function createWindow() {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 700,
+        height: 400,
+        resizable: false,
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
         },
@@ -15,7 +16,9 @@ function createWindow() {
         webPreferences: {
             nodeIntegration: true,
         },
+        frame: false
     });
+
     // and load the index.html of the app.
     mainWindow.loadFile('index.html');
     mainWindow.setBackgroundColor('#292929');
@@ -42,20 +45,6 @@ app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') app.quit();
 });
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
-//Receive and reply to synchronous message
-ipc.on('helloSync', (event, args) => {
-    //do something with args
-    event.returnValue = 'Hi, sync reply';
-});
-
-//Receive and reply to asynchronous message
-ipc.on('hello', (event, args) => {
-    event.sender.send('asynReply', 'Hi, asyn reply');
-    console.log('hello received');
-});
-
-ipc.on('directorySelected', (directory) => {
-    console.log(directory);
+ipc.on('directorySelected', (event, args) => {
+    console.log(args);
 });
